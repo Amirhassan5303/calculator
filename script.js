@@ -29,6 +29,22 @@ const appendNumber = function (value) {
   updateDisplay(currentInput);
 };
 
+const resetCalc = function () {
+  firstNumber = "";
+  secondNumber = "";
+  currentInput = "0";
+  updateDisplay(currentInput);
+};
+
+const deleteInput = function () {
+  currentInput = getCurrentInput();
+  currentInput = currentInput.slice(0, -1);
+  if (currentInput === "") {
+    currentInput = "0";
+  }
+  updateDisplay(currentInput);
+};
+
 buttons.addEventListener("click", (event) => {
   const target = event.target;
 
@@ -41,8 +57,16 @@ buttons.addEventListener("click", (event) => {
   }
 
   if (operator) {
+    selectedOperator();
   }
 
   if (action) {
+    if (action === "reset") {
+      resetCalc();
+    } else if (action === "delete") {
+      deleteInput();
+    } else if (action === "equal") {
+      calculate();
+    }
   }
 });
