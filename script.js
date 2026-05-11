@@ -5,6 +5,7 @@ let firstNumber = "";
 let secondNumber = "";
 let currentInput;
 let operator = null;
+let shouldClearDisplay = false;
 
 const updateDisplay = function (value) {
   display.textContent = value;
@@ -45,19 +46,57 @@ const deleteInput = function () {
   updateDisplay(currentInput);
 };
 
+const clearDiplay = function () {
+  display.textContent = "";
+  shouldClearDisplay = false;
+};
+
+const calculate = function () {
+  let result;
+  secondNumber = getCurrentInput();
+  if (secondNumber == "0") {
+    updateDisplay("error: division by zero");
+    return;
+  }
+  firstNumber = Number(firstNumber);
+  secondNumber = Number(secondNumber);
+  if (operator == "+") {
+    result = firstNumber + secondNumber;
+  } else if (operator == "-") {
+    result = firstNumber - secondNumber;
+  } else if (operator == "*") {
+    result = firstNumber * secondNumber;
+  } else if (operator == "/") {
+    result = firstNumber / secondNumber;
+    result = parseFloat(result.toFixed(4));
+  }
+
+  updateDisplay(result);
+  shouldClearDisplay = true;
+};
+
+const selectedOperator = function (op) {
+  operator = op;
+  firstNumber = getCurrentInput();
+  shouldClearDisplay = true;
+};
+
 buttons.addEventListener("click", (event) => {
   const target = event.target;
 
   let value = target.dataset.value;
-  let operator = target.dataset.operator;
+  let op = target.dataset.operator;
   let action = target.dataset.action;
 
   if (value) {
+    if (shouldClearDisplay) {
+      clearDiplay();
+    }
     appendNumber(value);
   }
 
-  if (operator) {
-    selectedOperator();
+  if (op) {
+    selectedOperator(op);
   }
 
   if (action) {
