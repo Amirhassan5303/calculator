@@ -54,10 +54,7 @@ const clearDiplay = function () {
 const calculate = function () {
   let result;
   secondNumber = getCurrentInput();
-  if (secondNumber == "0") {
-    updateDisplay("error: division by zero");
-    return;
-  }
+
   firstNumber = Number(firstNumber);
   secondNumber = Number(secondNumber);
   if (operator == "+") {
@@ -67,12 +64,18 @@ const calculate = function () {
   } else if (operator == "*") {
     result = firstNumber * secondNumber;
   } else if (operator == "/") {
+    if (secondNumber == "0") {
+      updateDisplay("error: division by zero");
+      shouldClearDisplay = true;
+      return;
+    }
     result = firstNumber / secondNumber;
     result = parseFloat(result.toFixed(4));
   }
 
   updateDisplay(result);
   shouldClearDisplay = true;
+  operator = null;
 };
 
 const selectedOperator = function (op) {
@@ -105,6 +108,9 @@ buttons.addEventListener("click", (event) => {
     } else if (action === "delete") {
       deleteInput();
     } else if (action === "equal") {
+      if (!operator) {
+        return;
+      }
       calculate();
     }
   }
